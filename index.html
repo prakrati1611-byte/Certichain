@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f8fc" />
+    <meta name="description" content="Verify mock certificates and inspect their issuer, recipient, status, and transaction record." />
+    <title>CertiChain — Certificate verification</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="CertiChain home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none"><path d="M16 3.5 26 7v8.1c0 6.4-4.2 10.8-10 13.4C10.2 25.9 6 21.5 6 15.1V7l10-3.5Z" stroke="currentColor" stroke-width="1.8"/><path d="m11.5 15.8 3 3 6.5-6.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span>certi<span class="brand-light">chain</span></span>
+        </a>
+        <nav class="nav-links" aria-label="Main navigation">
+          <a class="nav-active" href="#verify" data-nav="verify">Verify</a>
+          <a href="#certificates" data-nav="certificates">Certificates</a>
+          <a href="#insights" data-nav="insights">Insights</a>
+          <a href="#about" data-nav="about">About</a>
+        </nav>
+        <div class="network-indicator"><span class="network-dot"></span><span>Demo network</span></div>
+      </header>
+
+      <main>
+        <section class="intro dashboard-view" id="verify" data-view="verify">
+          <div class="eyebrow"><span class="eyebrow-line"></span> TRUST, MADE VERIFIABLE</div>
+          <h1>Proof that stands<br class="desktop-break" /> on its own.</h1>
+          <p class="intro-copy">Check a credential against its tamper-evident record. No calls, no guesswork—just a clear answer.</p>
+
+          <div class="workspace">
+            <section class="verify-panel" aria-labelledby="verify-title">
+              <div class="panel-heading">
+                <div>
+                  <div class="step-label"><span>01</span> &nbsp; CREDENTIAL LOOKUP</div>
+                  <h2 id="verify-title">Verify a certificate</h2>
+                  <p>Enter the unique certificate ID to check its record.</p>
+                </div>
+                <span class="heading-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M5 4.75h9.5L19 9.2v10.05H5V4.75Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 5v5h5M8 14h8M8 17h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                </span>
+              </div>
+
+              <form id="verify-form" novalidate>
+                <label class="field-label" for="certificate-id">Certificate ID</label>
+                <div class="input-wrap">
+                  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3" y="4" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M6.5 8h7M6.5 11h4.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                  <input id="certificate-id" name="certificateId" type="text" placeholder="e.g. CCH-2025-04821" autocomplete="off" aria-describedby="input-hint form-error" />
+                  <button class="clear-button" id="clear-input" type="button" aria-label="Clear certificate ID" hidden>×</button>
+                </div>
+                <p class="field-hint" id="input-hint">Usually printed near the bottom of the certificate.</p>
+                <p class="form-error" id="form-error" role="alert" hidden></p>
+                <button class="primary-button" id="verify-button" type="submit">
+                  <span>Verify certificate</span>
+                  <svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </form>
+
+              <div class="divider"><span>OR</span></div>
+
+              <label class="upload-zone" for="certificate-file" id="upload-zone">
+                <input id="certificate-file" type="file" accept=".pdf,.png,.jpg,.jpeg,.webp,application/pdf,image/png,image/jpeg,image/webp" />
+                <span class="upload-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 14v5h14v-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="upload-copy"><strong>Drop a certificate to fingerprint it</strong><span>PDF or image · stays on this device</span></span>
+                <span class="browse-link">Browse</span>
+              </label>
+              <div class="file-result" id="file-result" role="status" hidden></div>
+
+              <div class="try-sample">
+                <span>Just exploring?</span>
+                <button type="button" id="sample-button">Try a sample certificate <span aria-hidden="true">↗</span></button>
+              </div>
+            </section>
+
+            <aside class="verify-info-panel">
+              <div class="step-label"><span>01</span> &nbsp; QUICK AND CLEAR</div>
+              <div class="verify-info-art" aria-hidden="true"><span class="info-orbit"></span><span class="info-shield">✓</span><span class="info-spark">✦</span></div>
+              <h2>One check. More confidence.</h2>
+              <p>Enter the certificate ID and we’ll show its issuer, credential details, and record status on a separate results page.</p>
+              <div class="info-list"><span><i>✓</i> Issuer and issue date</span><span><i>✓</i> Current certificate status</span><span><i>✓</i> Record and transaction reference</span></div>
+              <div class="info-note"><span aria-hidden="true">ⓘ</span> Demo records only — not connected to a live blockchain.</div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="dashboard-view dashboard-page verification-page" id="result" data-view="result" hidden>
+          <div class="page-heading-row">
+            <div><div class="eyebrow"><span class="eyebrow-line"></span> CERTIFICATE CHECK</div><h1 class="page-title" id="verification-page-title">Verification result</h1><p class="intro-copy">Review the credential record and its current verification status.</p></div>
+            <a class="secondary-button" href="#verify">← Verify another certificate</a>
+          </div>
+          <div class="result-page-layout">
+            <section class="result-panel" aria-live="polite" aria-labelledby="verification-page-title">
+              <div class="result-topline"><span class="result-overline">VERIFICATION RESULT</span><span class="result-shield" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 20 6v6.5c0 4.7-3.4 7.8-8 9.5-4.6-1.7-8-4.8-8-9.5V6l8-3Z" stroke="currentColor" stroke-width="1.5"/><path d="m8.5 12 2.2 2.2 4.8-4.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+              <div class="empty-result" id="empty-result">
+                <div class="scan-art" aria-hidden="true"><span class="scan-ring ring-one"></span><span class="scan-ring ring-two"></span><span class="scan-document"><svg viewBox="0 0 46 54" fill="none"><path d="M8 3.5h19l11 11V49H8V3.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M27 4v11h11M15 24h16M15 30h16M15 36h11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="m17 44 3 3 8-8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="scan-spark spark-one">✳</span><span class="scan-spark spark-two">✦</span></div>
+                <h2 id="result-title">No verification yet</h2>
+                <p>Submit a certificate ID to see the verification details here.</p>
+                <a class="primary-link" href="#verify">Go to certificate verification <span aria-hidden="true">→</span></a>
+              </div>
+              <div class="verification-result" id="verification-result" hidden></div>
+              <div class="result-foot"><span class="chain-icon" aria-hidden="true">⌘</span><span>Each record is linked to a blockchain transaction</span><span class="foot-arrow" aria-hidden="true">↗</span></div>
+            </section>
+            <aside class="result-side-note"><span class="result-side-icon">✓</span><h2>What this result means</h2><p>The status shown is from the sample certificate registry and demonstrates a typical verification outcome.</p><a href="#about">Learn how verification works <span aria-hidden="true">↗</span></a></aside>
+          </div>
+        </section>
+
+        <section class="dashboard-view dashboard-page" id="certificates" data-view="certificates" hidden>
+          <div class="page-heading-row">
+            <div><div class="eyebrow"><span class="eyebrow-line"></span> CREDENTIAL DIRECTORY</div><h1 class="page-title">Certificates</h1><p class="intro-copy">Browse 10 mock credentials and their current verification status.</p></div>
+            <a class="secondary-button" href="#verify">Verify a certificate <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="metric-grid certificate-metrics">
+            <article class="metric-card"><span class="metric-label">TOTAL CERTIFICATES</span><strong id="certificate-total">10</strong><small>Mock registry records</small></article>
+            <article class="metric-card"><span class="metric-label">VERIFIED</span><strong id="certificate-verified">6</strong><small>Matches the issuer record</small></article>
+            <article class="metric-card"><span class="metric-label">REVOKED</span><strong id="certificate-revoked">2</strong><small>Issuer-marked inactive</small></article>
+            <article class="metric-card"><span class="metric-label">NOT VERIFIED</span><strong id="certificate-unverified">2</strong><small>Not yet verified</small></article>
+          </div>
+          <section class="content-card">
+            <div class="card-heading-row"><div><h2>Credential records</h2><p>Search by recipient, credential, issuer, or certificate ID.</p><small class="table-count" id="table-count" aria-live="polite"></small></div><label class="table-search"><span aria-hidden="true">⌕</span><input id="certificate-search" type="search" placeholder="Search records" aria-label="Search certificate records" /></label></div>
+            <div class="table-scroll"><table class="certificate-table"><thead><tr><th>CERTIFICATE ID</th><th>RECIPIENT</th><th>CREDENTIAL</th><th>ISSUER</th><th>ISSUED</th><th>STATUS</th><th></th></tr></thead><tbody id="certificate-rows"></tbody></table></div>
+            <p class="table-empty" id="table-empty" hidden>No certificates match your search.</p>
+            <div class="demo-note"><span aria-hidden="true">ⓘ</span> These are fictional mock records for demonstration; they are not real credentials or live blockchain data.</div>
+          </section>
+        </section>
+
+        <section class="dashboard-view dashboard-page" id="insights" data-view="insights" hidden>
+          <div class="eyebrow"><span class="eyebrow-line"></span> NETWORK OVERVIEW</div>
+          <h1 class="page-title">Insights</h1>
+          <p class="intro-copy">Explore the sample registry’s certificate volume, status mix, and issuer distribution.</p>
+          <div class="metric-grid insight-metrics">
+            <article class="metric-card metric-featured"><span class="metric-label">CERTIFICATE RECORDS</span><strong id="insight-total">10</strong><small>Mock registry entries</small><span class="metric-icon">✓</span></article>
+            <article class="metric-card"><span class="metric-label">ISSUERS</span><strong id="insight-issuers">4</strong><small>Institutions in the sample</small><span class="metric-icon">▤</span></article>
+            <article class="metric-card"><span class="metric-label">VERIFIED RATE</span><strong id="insight-verified-rate">60%</strong><small>Of sample certificates</small><span class="metric-icon">◎</span></article>
+          </div>
+          <div class="insights-grid">
+            <section class="content-card activity-card">
+              <div class="card-heading-row"><div><h2>Certificates by issuer</h2><p>Mock certificate count by institution</p></div><span class="chart-legend"><i></i> Records</span></div>
+              <div class="chart" id="issuer-chart" role="img" aria-label="Certificate counts for the most represented issuers"><div class="chart-grid" id="issuer-chart-axis"></div><div class="chart-bars" id="issuer-chart-bars"></div></div>
+            </section>
+            <section class="content-card status-card"><div class="card-heading-row"><div><h2>Verification status</h2><p>Breakdown of the 10 mock records</p></div></div><div class="coverage-list" id="field-coverage"></div><p class="demo-note"><span aria-hidden="true">ⓘ</span> Counts summarize fictional sample data only.</p></section>
+          </div>
+          <section class="content-card recent-activity"><div class="card-heading-row"><div><h2>Sample certificates</h2><p>Example records from the mock registry</p></div><a href="#certificates" class="text-link">Browse certificates ↗</a></div><div class="activity-list" id="sample-records"></div></section>
+        </section>
+
+        <section class="dashboard-view dashboard-page about-page" id="about" data-view="about" hidden>
+          <div class="about-hero"><div><div class="eyebrow"><span class="eyebrow-line"></span> CERTICHAIN · ABOUT</div><h1 class="page-title">Credentials you can<br class="desktop-break" /> trust at a glance.</h1><p class="intro-copy">CertiChain is a certificate verification experience designed to make credentials easier to check, share, and understand.</p><a class="primary-link" href="#verify">Look up a certificate <span aria-hidden="true">→</span></a></div><div class="about-illustration" aria-hidden="true"><span class="about-orbit orbit-a"></span><span class="about-orbit orbit-b"></span><span class="about-shield">✓</span><span class="orbit-dot dot-a"></span><span class="orbit-dot dot-b"></span></div></div>
+          <div class="about-cards">
+            <article class="content-card about-card"><span class="about-card-icon">⌕</span><h2>What it does</h2><p>Check a certificate ID against its issuer record and review the credential, issue date, status, and record reference together.</p></article>
+            <article class="content-card about-card"><span class="about-card-icon">⛓</span><h2>Why blockchain?</h2><p>A well-designed blockchain record can make credential fingerprints and issuer attestations tamper-evident and independently checkable.</p></article>
+            <article class="content-card about-card"><span class="about-card-icon">⌑</span><h2>Fictional demo data</h2><p>The 10 sample certificates and their verification outcomes are invented for this interface, not real credentials.</p></article>
+          </div>
+          <section class="content-card about-details" id="how-it-works"><div class="card-heading-row"><div><div class="step-label"><span>01</span> &nbsp; HOW VERIFICATION WORKS</div><h2>From certificate to clear answer.</h2></div></div><div class="about-steps"><article><span>01</span><div><h3>Look up a certificate</h3><p>Enter the certificate ID shown on the sample credential.</p></div></article><article><span>02</span><div><h3>Check the record status</h3><p>Review whether the mock registry marks it verified, revoked, or not verified.</p></div></article><article><span>03</span><div><h3>Review the result</h3><p>See the recipient, issuer, and transaction reference on the result page.</p></div></article></div></section>
+          <div class="prototype-banner"><span>ⓘ</span><p><strong>About this prototype</strong><br>The 10 certificate records and statuses are fictional mock data for demonstration. No certificate or blockchain transaction is actually verified.</p></div>
+        </section>
+
+      </main>
+
+      <footer class="footer"><a class="brand footer-brand" href="#"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3.5 26 7v8.1c0 6.4-4.2 10.8-10 13.4C10.2 25.9 6 21.5 6 15.1V7l10-3.5Z" stroke="currentColor" stroke-width="1.8"/><path d="m11.5 15.8 3 3 6.5-6.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>certi<span class="brand-light">chain</span></span></a><span>A more trustworthy way to prove what you’ve achieved.</span><span class="footer-note">MOCK DATA · NOT A LIVE BLOCKCHAIN SERVICE</span></footer>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
